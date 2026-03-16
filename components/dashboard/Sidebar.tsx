@@ -26,9 +26,9 @@ const navItems = [
   { href: "/inicio/configuracoes", label: "Configurações", icon: "settings" },
 ];
 
-function NavIcon({ name, variant = "default" }: { name: string; variant?: "dark" | "light" }) {
+function NavIcon({ name, variant = "light" }: { name: string; variant?: "dark" | "light" }) {
   const isDark = variant === "dark";
-  const boxCls = isDark ? "flex h-9 w-9 shrink-0 items-center justify-center rounded bg-[#1e3a5f] text-white" : "flex h-9 w-9 shrink-0 items-center justify-center rounded bg-slate-200 text-slate-500";
+  const boxCls = isDark ? "flex h-9 w-9 shrink-0 items-center justify-center rounded bg-primary text-white" : "flex h-9 w-9 shrink-0 items-center justify-center rounded bg-slate-200 text-slate-500";
   const cls = "h-5 w-5 shrink-0";
   if (name === "home")
     return (
@@ -68,7 +68,12 @@ function NavIcon({ name, variant = "default" }: { name: string; variant?: "dark"
   return null;
 }
 
-export function Sidebar() {
+interface SidebarProps {
+  open?: boolean;
+  onClose?: () => void;
+}
+
+export function Sidebar({ open = false, onClose }: SidebarProps) {
   const pathname = usePathname();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({
     Cadastro: true,
@@ -76,29 +81,49 @@ export function Sidebar() {
   });
 
   return (
-    <aside className="flex w-64 flex-col bg-[#1e3a5f]">
-      <div className="border-b border-white/10 p-5">
-        <div className="flex items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-sm font-bold text-white">
+    <aside
+      style={{ backgroundColor: "#f1f3f9" }}
+      className={`flex w-64 flex-col z-50 transition-transform duration-200 ease-out lg:translate-x-0 lg:static
+        fixed inset-y-0 left-0 transform ${
+          open ? "translate-x-0" : "-translate-x-full"
+        }`}
+    >
+      {/* Topo: mesma altura do header (área branca de busca) */}
+      <div className="min-h-16 border-b border-white/10 bg-primary px-4 py-3 sm:px-5 sm:py-3 flex items-center justify-between gap-2 shrink-0">
+        <div className="flex items-center gap-2 min-w-0">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/20 text-sm font-bold text-white">
             DTP
           </div>
-          <div>
-            <p className="font-semibold text-white">DTP Digital</p>
-            <p className="text-xs text-white/80">Departamento de Transportes Públicos</p>
+          <div className="min-w-0">
+            <p className="font-semibold text-white truncate">DTP Digital</p>
+            <p className="text-xs text-white/80 truncate">Departamento de Transportes Públicos</p>
           </div>
         </div>
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            className="lg:hidden flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-white/90 hover:bg-white/10 min-h-[44px] min-w-[44px]"
+            aria-label="Fechar menu"
+          >
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        )}
       </div>
 
       <nav className="flex-1 space-y-2 p-3">
         {navItems.map((item) => {
           if ("href" in item) {
-            const isActive = pathname === item.href;
+            const href = item.href ?? "#";
+            const isActive = pathname === href;
             return (
               <Link
                 key={item.label}
-                href={item.href}
-                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold transition-colors ${
-                  isActive ? "bg-slate-100 text-slate-900" : "bg-white/10 text-white hover:bg-white/15"
+                href={href}
+                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold transition-colors min-h-[44px] ${
+                  isActive ? "bg-white text-slate-900 shadow-sm" : "text-slate-700 hover:bg-white/80 hover:text-slate-900"
                 }`}
               >
                 {isActive ? (
@@ -118,8 +143,8 @@ export function Sidebar() {
               <button
                 type="button"
                 onClick={() => setExpanded((e) => ({ ...e, [item.label]: !isExpanded }))}
-                className={`flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm font-bold transition-colors ${
-                  isLightCard ? "bg-slate-100 text-slate-900" : "bg-slate-600/80 text-white hover:bg-slate-600"
+                className={`flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm font-bold transition-colors min-h-[44px] ${
+                  isLightCard ? "bg-white text-slate-900 shadow-sm" : "text-slate-700 hover:bg-white/80 hover:text-slate-900"
                 }`}
               >
                 <NavIcon name={item.icon} variant={isLightCard ? "dark" : "light"} />
@@ -145,8 +170,8 @@ export function Sidebar() {
                     <Link
                       key={child.label}
                       href={child.href}
-                      className={`flex items-center gap-2 border-t border-slate-200/50 bg-slate-50 py-2 pl-4 pr-3 text-sm font-medium text-slate-700 hover:bg-slate-100 ${
-                        isActive ? "bg-slate-200 font-semibold text-slate-900" : ""
+                      className={`flex items-center gap-2 border-t border-slate-200 bg-white/50 py-2 pl-4 pr-3 text-sm font-medium text-slate-700 hover:bg-white min-h-[44px] ${
+                        isActive ? "bg-white font-semibold text-slate-900" : ""
                       }`}
                     >
                       {"subIcon" in child && child.subIcon && (
@@ -163,7 +188,7 @@ export function Sidebar() {
 
       <Link
         href="/"
-        className="mx-3 mb-3 flex items-center gap-3 rounded-xl bg-white/10 px-3 py-2.5 text-sm font-medium text-white hover:bg-white/15"
+        className="mx-3 mb-3 flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 min-h-[44px]"
       >
         <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -171,8 +196,8 @@ export function Sidebar() {
         Sair
       </Link>
 
-      <div className="border-t border-white/10 p-4 text-xs text-white/70">
-        <p className="font-medium text-white/90">Departamento de Transportes Públicos (DTP)</p>
+      <div className="border-t border-slate-200 p-4 text-xs text-slate-600">
+        <p className="font-medium text-slate-800">Departamento de Transportes Públicos (DTP)</p>
         <p className="mt-1">Rua Joaquim Carlos, nº 655, Pari - São Paulo</p>
       </div>
     </aside>

@@ -1,0 +1,78 @@
+/**
+ * Style Guide - Balcão Digital DTP
+ * Todas as cores e tokens de design do projeto.
+ * Use variáveis CSS ou classes Tailwind geradas via @theme em globals.css.
+ */
+
+:root {
+  /* ========== Marca / Primária ========== */
+  --color-primary: #1e3a5f;
+  --color-primary-hover: #16304d;
+  --color-primary-muted: rgba(30, 58, 95, 0.2);
+  --color-primary-overlay: rgba(30, 58, 95, 0.8);
+
+  /* Navegação lateral (igual ao print) */
+  --color-sidebar: #f1f3f9;
+
+  /* ========== Fundo e texto base ========== */
+  --background: #ffffff;
+  --foreground: #171717;
+
+  /* ========== Semânticas ========== */
+  /* Sucesso / Aprovar / Pago */
+  --color-success: #059669;
+  --color-success-bg: #10b981;
+  --color-success-text: #059669;
+
+  /* Erro / Reprovar / Prioridade / Novas */
+  --color-error: #e11d48;
+  --color-error-500: #f43f5e;
+  --color-error-border: #be123c;
+  --color-error-bg: #fff1f2;
+  --color-error-text: #be123c;
+
+  /* Aviso / Em espera */
+  --color-warning: #f59e0b;
+  --color-warning-400: #fbbf24;
+  --color-warning-bg: #fffbeb;
+  --color-warning-text: #b45309;
+
+  /* Info / Tag idoso */
+  --color-info: #0ea5e9;
+  --color-info-500: #0ea5e9;
+  --color-info-bg: #e0f2fe;
+
+  /* Finalizadas */
+  --color-finalized: #14b8a6;
+
+  /* Link secundário (ex: esqueci senha) */
+  --color-link: #2563eb;
+
+  /* ========== Neutros (Slate) ========== */
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+
+  /* ========== Bordas e superfícies ========== */
+  --border-default: 1px solid var(--color-neutral-200);
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}

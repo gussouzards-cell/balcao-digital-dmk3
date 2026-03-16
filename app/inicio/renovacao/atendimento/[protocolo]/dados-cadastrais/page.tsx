@@ -19,7 +19,7 @@ export default function DadosCadastraisPage() {
       <div>
         <h2 className="text-base font-bold text-slate-900">Dados Cadastrais</h2>
 
-        <div className="mt-4 grid gap-6 lg:grid-cols-2">
+        <div className="mt-4 grid gap-6 sm:gap-6 lg:grid-cols-2">
           <div className="space-y-3">
             <p className="text-sm text-slate-700"><span className="font-semibold text-slate-800">CEP:</span> 11.111-111</p>
             <p className="text-sm text-slate-700"><span className="font-semibold text-slate-800">Cidade:</span> São Paulo</p>
@@ -58,10 +58,10 @@ export default function DadosCadastraisPage() {
                 </svg>
               </button>
             </div>
-            <div className="mt-3 flex flex-wrap gap-4">
+            <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <button
                 type="button"
-                className="flex min-w-[140px] flex-1 basis-0 items-center justify-center gap-2 rounded-lg bg-[#1e3a5f] px-8 py-2.5 text-sm font-medium text-white hover:bg-[#16304d]"
+                className="btn-primary flex min-h-[44px] min-w-0 flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-8 py-2.5 text-sm font-medium text-white hover:bg-primary-hover sm:min-h-0 sm:min-w-[140px]"
               >
                 <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -70,7 +70,7 @@ export default function DadosCadastraisPage() {
               </button>
               <button
                 type="button"
-                className="flex min-w-[140px] flex-1 basis-0 items-center justify-center gap-2 rounded-lg bg-[#1e3a5f] px-8 py-2.5 text-sm font-medium text-white hover:bg-[#16304d]"
+                className="btn-primary flex min-h-[44px] min-w-0 flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-8 py-2.5 text-sm font-medium text-white hover:bg-primary-hover sm:min-h-0 sm:min-w-[140px]"
               >
                 <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 00-2 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />

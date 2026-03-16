@@ -1,8 +1,12 @@
+"use client";
+
+import { PageWrapper, PageTitle, PageDescription } from "@/components/styled/Page.styles";
+
 export default function AlvaraPage() {
   return (
-    <div>
-      <h1 className="text-xl font-bold text-slate-900">Alvará de estacionamento</h1>
-      <p className="mt-2 text-slate-600">Página em construção.</p>
-    </div>
+    <PageWrapper>
+      <PageTitle>Alvará de estacionamento</PageTitle>
+      <PageDescription>Página em construção.</PageDescription>
+    </PageWrapper>
   );
 }
