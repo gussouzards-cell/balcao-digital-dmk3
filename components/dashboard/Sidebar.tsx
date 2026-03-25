@@ -4,194 +4,254 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-const navItems = [
-  { href: "/inicio", label: "Início", icon: "home" },
-  {
-    label: "Cadastro",
-    sublabel: "CONDUTAX",
-    icon: "document",
-    defaultExpanded: true,
-    children: [
-      { href: "/inicio/cadastramento", label: "Cadastramento", subIcon: "person-star" },
-      { href: "/inicio/renovacao", label: "Renovação", subIcon: "document-arrows" },
-    ],
-  },
-  {
-    label: "Licença",
-    sublabel: "ALVARÁ DE ESTACIONAMENTO",
-    icon: "car",
-    defaultExpanded: false,
-    children: [{ href: "/inicio/alvara", label: "ALVARÁ DE ESTACIONAMENTO" }],
-  },
-  { href: "/inicio/configuracoes", label: "Configurações", icon: "settings" },
-];
+const NAV_W = "w-[233px]";
 
-function NavIcon({ name, variant = "default" }: { name: string; variant?: "dark" | "light" }) {
-  const isDark = variant === "dark";
-  const boxCls = isDark ? "flex h-9 w-9 shrink-0 items-center justify-center rounded bg-[#1e3a5f] text-white" : "flex h-9 w-9 shrink-0 items-center justify-center rounded bg-slate-200 text-slate-500";
-  const cls = "h-5 w-5 shrink-0";
-  if (name === "home")
-    return (
-      <div className={boxCls}>
-        <svg className={cls} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-        </svg>
-      </div>
-    );
-  if (name === "document")
-    return (
-      <div className={boxCls}>
-        <svg className={cls} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-        </svg>
-      </div>
-    );
-  if (name === "car")
-    return (
-      <div className={boxCls}>
-        <svg className={cls} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h8m-8 4h8m-4 4h4M5 17h14a1 1 0 001-1v-3.414a1 1 0 00-.293-.707L16 10.586M5 17V7a1 1 0 011-1h12a1 1 0 011 1v10a1 1 0 01-1 1" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      </div>
-    );
-  if (name === "settings")
-    return (
-      <div className={boxCls}>
-        <svg className={cls} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
-      </div>
-    );
-  return null;
+function ChevronDown({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="12" height="7" viewBox="0 0 12 7" fill="none" aria-hidden>
+      <path d="M1 1.5L6 5.5L11 1.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
 }
 
-export function Sidebar() {
+function ChevronUp({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="12" height="7" viewBox="0 0 12 7" fill="none" aria-hidden>
+      <path d="M11 5.5L6 1.5L1 5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+interface SidebarProps {
+  open?: boolean;
+  onClose?: () => void;
+}
+
+export function Sidebar({ open = false, onClose }: SidebarProps) {
   const pathname = usePathname();
-  const [expanded, setExpanded] = useState<Record<string, boolean>>({
-    Cadastro: true,
-    Licença: false,
-  });
+  const [licencaOpen, setLicencaOpen] = useState(false);
+
+  const isInicio = pathname === "/inicio";
+  const isCadastramento = pathname.startsWith("/inicio/cadastramento");
+  const isRenovacao = pathname.startsWith("/inicio/renovacao");
+  const isAlvara = pathname === "/inicio/alvara";
+  const isConfig = pathname === "/inicio/configuracoes";
 
   return (
-    <aside className="flex w-64 flex-col bg-[#1e3a5f]">
-      <div className="border-b border-white/10 p-5">
-        <div className="flex items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-sm font-bold text-white">
-            DTP
-          </div>
-          <div>
-            <p className="font-semibold text-white">DTP Digital</p>
-            <p className="text-xs text-white/80">Departamento de Transportes Públicos</p>
-          </div>
-        </div>
+    <aside
+      className={`fixed inset-y-0 left-0 z-40 flex w-[272px] shrink-0 flex-col bg-[#193758] transition-transform duration-200 ease-out lg:relative lg:translate-x-0 ${
+        open ? "translate-x-0" : "-translate-x-full"
+      }`}
+      aria-label="Menu principal"
+    >
+      {/* Faixa superior — logo + texto (Figma) */}
+      <div className="flex h-16 shrink-0 items-center gap-3 px-[18px]">
+        <img
+          src="/img/dashboard-dtp-logo.png"
+          alt=""
+          width={43}
+          height={43}
+          className="h-[43px] w-[43px] shrink-0 rounded object-cover"
+        />
+        <p className="max-w-[134px] text-[10px] font-medium leading-snug text-white">
+          Departamento de Transportes Públicos
+        </p>
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            className="ml-auto flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-white/90 hover:bg-white/10 lg:hidden"
+            aria-label="Fechar menu"
+          >
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        )}
       </div>
 
-      <nav className="flex-1 space-y-2 p-3">
-        {navItems.map((item) => {
-          if ("href" in item) {
-            const isActive = pathname === item.href;
-            return (
+      {/* Área clara — navegação (Figma #f1f3f9) */}
+      <div className="flex min-h-0 flex-1 flex-col bg-[#f1f3f9] shadow-[4px_0_2px_rgba(0,0,0,0.02)]">
+        <nav className="flex flex-1 flex-col gap-3 px-3.5 pb-4 pt-6" aria-label="Menu principal">
+          {/* Início */}
+          <div className={NAV_W}>
+            <Link
+              href="/inicio"
+              onClick={() => onClose?.()}
+              className={`flex h-[54px] items-center gap-3 rounded-[6px] pl-[15px] pr-3 shadow-[0px_3.5px_5.5px_rgba(0,0,0,0.02)] ${
+                isInicio ? "bg-white" : "bg-transparent hover:bg-white/70"
+              }`}
+            >
+              <span className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-[3px] bg-[#193758]">
+                <svg className="h-3.5 w-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+              </span>
+              <span className="text-[14px] font-bold leading-[1.5] text-[#2d3748]">Início</span>
+            </Link>
+          </div>
+
+          {/* Cadastro CONDUTAX — cartão expandido */}
+          <div
+            className={`${NAV_W} relative min-h-[176px] rounded-[6px] bg-white shadow-[0px_3.5px_5.5px_rgba(0,0,0,0.02)]`}
+          >
+            <div className="absolute left-[15px] top-[12px] h-[22px] w-[22px] rounded-[3px] bg-[#193758]" />
+            <svg
+              className="absolute left-[18px] top-[15px] h-[18px] w-[18px] text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <div className="pl-[58px] pr-8 pt-3">
+              <p className="text-[14px] font-bold leading-[1.5] text-[#2d3748]">Cadastro</p>
+              <p className="text-[8px] font-normal leading-[1.5] text-[#2d3748]">CONDUTAX</p>
+            </div>
+            <div className="absolute right-3 top-[22px] text-[#2d3748]">
+              <ChevronUp className="h-[7px] w-3" />
+            </div>
+
+            <div className="relative mt-2 px-4 pb-3">
               <Link
-                key={item.label}
-                href={item.href}
-                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold transition-colors ${
-                  isActive ? "bg-slate-100 text-slate-900" : "bg-white/10 text-white hover:bg-white/15"
-                }`}
+                href="/inicio/cadastramento"
+                onClick={() => onClose?.()}
+                className="relative mb-2 flex h-[30px] items-center pl-[30px]"
               >
-                {isActive ? (
-                  <NavIcon name={item.icon} variant="dark" />
-                ) : (
-                  <NavIcon name={item.icon} variant="light" />
-                )}
-                {item.label}
-              </Link>
-            );
-          }
-          const isExpanded = expanded[item.label] ?? (item as { defaultExpanded?: boolean }).defaultExpanded ?? false;
-          const hasActiveChild = item.children?.some((c) => pathname === c.href);
-          const isLightCard = isExpanded || hasActiveChild;
-          return (
-            <div key={item.label} className="rounded-xl overflow-hidden">
-              <button
-                type="button"
-                onClick={() => setExpanded((e) => ({ ...e, [item.label]: !isExpanded }))}
-                className={`flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm font-bold transition-colors ${
-                  isLightCard ? "bg-slate-100 text-slate-900" : "bg-slate-600/80 text-white hover:bg-slate-600"
-                }`}
-              >
-                <NavIcon name={item.icon} variant={isLightCard ? "dark" : "light"} />
-                <div className="flex-1">
-                  <p>{item.label}</p>
-                  {"sublabel" in item && item.sublabel && (
-                    <p className="text-[10px] font-normal opacity-80">{item.sublabel}</p>
-                  )}
-                </div>
+                <span
+                  className={`absolute left-0 top-0 h-full w-[30px] rounded-[3px] shadow-[0px_3.5px_5.5px_rgba(0,0,0,0.02)] ${
+                    isCadastramento ? "bg-[#193758]" : "bg-[#f1f3f9]"
+                  }`}
+                />
                 <svg
-                  className={`h-4 w-4 shrink-0 transition-transform ${isExpanded ? "rotate-180" : ""}`}
+                  className={`absolute left-[7px] top-1/2 h-4 w-4 -translate-y-1/2 ${
+                    isCadastramento ? "text-white" : "text-slate-500"
+                  }`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
-              </button>
-              {isExpanded &&
-                item.children?.map((child) => {
-                  const isActive = pathname === child.href;
-                  return (
-                    <Link
-                      key={child.label}
-                      href={child.href}
-                      className={`flex items-center gap-2 border-t border-slate-200/50 bg-slate-50 py-2 pl-4 pr-3 text-sm font-medium text-slate-700 hover:bg-slate-100 ${
-                        isActive ? "bg-slate-200 font-semibold text-slate-900" : ""
-                      }`}
-                    >
-                      {"subIcon" in child && child.subIcon && (
-                        <SubIcon name={child.subIcon} />
-                      )}
-                      {child.label}
-                    </Link>
-                  );
-                })}
+                <span
+                  className={`pl-8 text-[14px] font-bold leading-[1.5] ${
+                    isCadastramento ? "text-[#193758]" : "text-[#a0aec0]"
+                  }`}
+                >
+                  Cadastramento
+                </span>
+              </Link>
+
+              <Link
+                href="/inicio/renovacao"
+                onClick={() => onClose?.()}
+                className="relative flex h-[30px] items-center pl-[30px]"
+              >
+                <span
+                  className={`absolute left-0 top-0 h-full w-[30px] rounded-[3px] shadow-[0px_3.5px_5.5px_rgba(0,0,0,0.02)] ${
+                    isRenovacao ? "bg-[#193758]" : "bg-[#f1f3f9]"
+                  }`}
+                />
+                <svg
+                  className={`absolute left-[7px] top-1/2 h-4 w-4 -translate-y-1/2 ${
+                    isRenovacao ? "text-white" : "text-slate-500"
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span
+                  className={`pl-8 text-[14px] font-bold leading-[1.5] ${
+                    isRenovacao ? "text-[#193758]" : "text-[#a0aec0]"
+                  }`}
+                >
+                  Renovação
+                </span>
+              </Link>
             </div>
-          );
-        })}
-      </nav>
+          </div>
 
-      <Link
-        href="/"
-        className="mx-3 mb-3 flex items-center gap-3 rounded-xl bg-white/10 px-3 py-2.5 text-sm font-medium text-white hover:bg-white/15"
-      >
-        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-        </svg>
-        Sair
-      </Link>
+          {/* Licença */}
+          <div className={NAV_W}>
+            <button
+              type="button"
+              onClick={() => setLicencaOpen(!licencaOpen)}
+              className="relative flex h-[54px] w-full items-center rounded-[6px] text-left"
+            >
+              <span className="absolute left-[15px] top-1/2 h-[22px] w-[22px] -translate-y-1/2 rounded-[3px] bg-white shadow-[0px_3.5px_5.5px_rgba(0,0,0,0.02)]" />
+              <svg
+                className="absolute left-[18px] top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-slate-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h8m-8 4h8m-4 4h4M5 17h14a1 1 0 001-1v-3.414a1 1 0 00-.293-.707L16 10.586M5 17V7a1 1 0 011-1h12a1 1 0 011 1v10a1 1 0 01-1 1" />
+              </svg>
+              <div className="pl-[58px] pr-8">
+                <p className="text-[14px] font-bold leading-[1.5] text-[#a0aec0]">Licença</p>
+                <p className="text-[8px] font-normal leading-[1.5] text-[#a0aec0]">ALVARÁ DE ESTACIONAMENTO</p>
+              </div>
+              <ChevronDown className="absolute right-3 top-1/2 h-[7px] w-3 -translate-y-1/2 text-[#a0aec0]" />
+            </button>
+            {licencaOpen && (
+              <div className="mt-1 rounded-md border border-slate-200 bg-white py-1 shadow-sm">
+                <Link
+                  href="/inicio/alvara"
+                  onClick={() => onClose?.()}
+                  className={`block px-4 py-2 text-sm ${isAlvara ? "font-semibold text-[#193758]" : "text-slate-600"}`}
+                >
+                  ALVARÁ DE ESTACIONAMENTO
+                </Link>
+              </div>
+            )}
+          </div>
+        </nav>
 
-      <div className="border-t border-white/10 p-4 text-xs text-white/70">
-        <p className="font-medium text-white/90">Departamento de Transportes Públicos (DTP)</p>
-        <p className="mt-1">Rua Joaquim Carlos, nº 655, Pari - São Paulo</p>
+        {/* Configurações + Sair + rodapé */}
+        <div className="mt-auto flex flex-col gap-6 px-3.5 pb-6 pt-4">
+          <div className="mx-auto h-px w-[106px] bg-[#cbd5e1]" aria-hidden />
+
+          <Link
+            href="/inicio/configuracoes"
+            onClick={() => onClose?.()}
+            className="inline-grid grid-cols-[30px_1fr] items-center gap-3"
+          >
+            <span className="flex h-[30px] w-[30px] items-center justify-center rounded-[3px] bg-white shadow-[0px_3.5px_5.5px_rgba(0,0,0,0.02)]">
+              <svg className="h-[18px] w-[18px] text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </span>
+            <span
+              className={`text-[14px] font-bold leading-[1.5] ${
+                isConfig ? "text-[#193758]" : "text-[#a0aec0]"
+              }`}
+            >
+              Configurações
+            </span>
+          </Link>
+
+          <Link
+            href="/"
+            onClick={() => onClose?.()}
+            className="inline-grid grid-cols-[30px_1fr] items-center gap-3"
+          >
+            <span className="flex h-[30px] w-[30px] items-center justify-center rounded-[3px] bg-white shadow-[0px_3.5px_5.5px_rgba(0,0,0,0.02)]">
+              <svg className="h-3.5 w-3.5 text-[#4d4d4d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+            </span>
+            <span className="text-[14px] font-bold leading-[1.5] text-[#4d4d4d]">Sair</span>
+          </Link>
+
+          <div className="text-[10px] leading-normal text-[#3f444d]">
+            <p className="font-bold">Departamento de Transportes Públicos (DTP)</p>
+            <p className="mt-2 font-normal">Rua Joaquim Carlos, nº 655, Pari - São Paulo</p>
+          </div>
+        </div>
       </div>
     </aside>
   );
-}
-
-function SubIcon({ name }: { name: string }) {
-  const cls = "h-4 w-4 shrink-0 text-slate-500";
-  if (name === "person-star")
-    return (
-      <svg className={cls} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-      </svg>
-    );
-  if (name === "document-arrows")
-    return (
-      <svg className={cls} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h8m-8 4h8m-4 4h4M7 16l4-4m0 0l4 4m-4-4v4" />
-      </svg>
-    );
-  return null;
 }

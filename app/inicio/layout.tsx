@@ -1,5 +1,6 @@
-import { Sidebar } from "@/components/dashboard/Sidebar";
-import { Header } from "@/components/dashboard/Header";
+import { DashboardLayoutClient } from "@/components/dashboard/DashboardLayoutClient";
+import "../styles/dashboard.css";
+import "../styles/atendimento.css";
 
 export default function DashboardLayout({
   children,
@@ -7,12 +8,10 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen bg-slate-100">
-      <Sidebar />
-      <div className="flex flex-1 flex-col min-w-0">
-        <Header />
-        <main className="flex-1 overflow-auto p-4">{children}</main>
-      </div>
-    </div>
+    <DashboardLayoutClient>
+      <main id="main" className="dashboard-main flex-1 overflow-x-auto overflow-y-auto p-3 sm:p-4" tabIndex={-1}>
+        {children}
+      </main>
+    </DashboardLayoutClient>
   );
 }

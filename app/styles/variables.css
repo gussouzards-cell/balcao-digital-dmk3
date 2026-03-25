@@ -1,0 +1,76 @@
+/**
+ * Variáveis do Balcão Digital (DTP)
+ * Edite aqui para mudar cores, espaçamentos e tipografia em todo o projeto.
+ */
+
+:root {
+  /* Cores principais */
+  --dtp-primary: #1e3a5f;
+  --dtp-primary-hover: #16304d;
+  --dtp-primary-light: rgba(30, 58, 95, 0.08);
+
+  /* Cores de estado */
+  --dtp-success: #059669;
+  --dtp-success-bg: #d1fae5;
+  --dtp-error: #dc2626;
+  --dtp-error-bg: #fee2e2;
+  --dtp-warning: #d97706;
+  --dtp-warning-bg: #fef3c7;
+
+  /* Tags / badges */
+  --dtp-tag-prioridade: #e11d48;
+  --dtp-tag-idoso: #0ea5e9;
+  --dtp-tag-fila: #94a3b8;
+
+  /* Neutros */
+  --dtp-bg-page: #f1f5f9;
+  --dtp-bg-card: #ffffff;
+  --dtp-border: #e2e8f0;
+  --dtp-border-strong: #94a3b8;
+  --dtp-text: #334155;
+  --dtp-text-muted: #64748b;
+  --dtp-text-heading: #0f172a;
+
+  /* Texto sobre cores (botões, sidebar) */
+  --dtp-text-on-primary: #ffffff;
+
+  /* Sidebar */
+  --dtp-sidebar-bg: #1e3a5f;
+  --dtp-sidebar-text: #ffffff;
+  --dtp-sidebar-text-muted: rgba(255, 255, 255, 0.8);
+  --dtp-sidebar-border: rgba(255, 255, 255, 0.1);
+  --dtp-sidebar-active: rgba(255, 255, 255, 0.15);
+
+  /* Login – coluna branding */
+  --dtp-brand-overlay: rgba(30, 58, 95, 0.8);
+  --dtp-brand-logo-bg: rgba(255, 255, 255, 0.2);
+
+  /* Espaçamentos (use nas suas classes ou no Tailwind) */
+  --dtp-space-1: 0.25rem;   /* 4px */
+  --dtp-space-2: 0.5rem;    /* 8px */
+  --dtp-space-3: 0.75rem;   /* 12px */
+  --dtp-space-4: 1rem;      /* 16px */
+  --dtp-space-5: 1.25rem;   /* 20px */
+  --dtp-space-6: 1.5rem;    /* 24px */
+  --dtp-space-8: 2rem;      /* 32px */
+  --dtp-space-10: 2.5rem;   /* 40px */
+
+  /* Bordas */
+  --dtp-radius-sm: 0.375rem;  /* 6px */
+  --dtp-radius: 0.5rem;       /* 8px */
+  --dtp-radius-lg: 0.75rem;   /* 12px */
+  --dtp-radius-xl: 1rem;      /* 16px */
+
+  /* Sombras */
+  --dtp-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --dtp-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --dtp-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+
+  /* Botões de ação */
+  --dtp-btn-approve: #059669;
+  --dtp-btn-approve-hover: #047857;
+  --dtp-btn-reject: #dc2626;
+  --dtp-btn-reject-hover: #b91c1c;
+  --dtp-btn-back-border: #94a3b8;
+  --dtp-btn-back-hover: #f8fafc;
+}
