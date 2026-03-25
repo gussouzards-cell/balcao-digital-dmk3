@@ -2,22 +2,27 @@
 
 import { useParams } from "next/navigation";
 import { AtendimentoShell } from "@/components/atendimento/AtendimentoShell";
+import { renovacaoAtendimentoUrls } from "@/lib/renovacao-atendimento-nav";
 
 export default function CnhPage() {
   const params = useParams();
   const protocolo = (params?.protocolo as string) ?? "T2500221-01";
+  const u = renovacaoAtendimentoUrls(protocolo);
 
   return (
     <AtendimentoShell
       currentStep={4}
+      showHistorico
+      stepperBackHref={u.dadosCadastrais}
       bottomQuestion="Os dados da CNH e comprovante são válidos?"
-      bottomInstruction="Clique em avançar para aprovar e seguir para aprovação final da solicitação."
-      nextHref={`/inicio/renovacao/atendimento/${protocolo}/aprovacao`}
+      bottomInstruction="Clique em avançar para seguir para a distribuição de ações criminais."
+      nextHref={u.distribuicaoAcoes}
       nextLabel="Avançar"
-      prevHref={`/inicio/renovacao/atendimento/${protocolo}/dados-cadastrais`}
+      rejectLabel="RECUSAR"
+      rejectVariant="outline"
     >
       <div>
-        <h2 className="text-base font-bold text-slate-900">Confirmação de Dados</h2>
+        <h2 className="text-base font-bold text-slate-900">Dados CNH</h2>
 
         <div className="mt-4 grid gap-6 lg:grid-cols-2">
           <div className="space-y-3">
@@ -65,18 +70,20 @@ export default function CnhPage() {
             <div className="mt-3 flex flex-wrap gap-4">
               <button
                 type="button"
-                className="flex min-w-[140px] flex-1 basis-0 items-center justify-center gap-2 rounded-lg bg-[#1e3a5f] px-8 py-2.5 text-sm font-medium text-white hover:bg-[#16304d]"
+                className="dtp-btn-primary flex min-w-[140px] flex-1 basis-0 items-center justify-center gap-2 rounded-lg px-8 py-2.5 text-sm font-medium"
+                aria-label="Baixar comprovante CNH"
               >
-                <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
                 Baixar
               </button>
               <button
                 type="button"
-                className="flex min-w-[140px] flex-1 basis-0 items-center justify-center gap-2 rounded-lg bg-[#1e3a5f] px-8 py-2.5 text-sm font-medium text-white hover:bg-[#16304d]"
+                className="dtp-btn-primary flex min-w-[140px] flex-1 basis-0 items-center justify-center gap-2 rounded-lg px-8 py-2.5 text-sm font-medium"
+                aria-label="Imprimir"
               >
-                <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 00-2 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                 </svg>
                 Imprimir

@@ -1,0 +1,143 @@
+/**
+ * Página Início (/inicio) – Home do dashboard
+ * Edite aqui: cards de resumo, “Próximas solicitações”, botões.
+ */
+
+.home-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--dtp-text-heading);
+  margin-bottom: var(--dtp-space-6);
+}
+
+/* Cards de total de solicitações */
+.home-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: var(--dtp-space-6);
+}
+@media (min-width: 768px) {
+  .home-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.home-summary-card {
+  background: var(--dtp-bg-card);
+  border: 1px solid var(--dtp-border);
+  border-radius: var(--dtp-radius-xl);
+  padding: var(--dtp-space-4);
+  box-shadow: var(--dtp-shadow-sm);
+}
+
+.home-summary-card-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--dtp-text-muted);
+}
+
+.home-summary-card-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--dtp-primary);
+  margin-top: var(--dtp-space-2);
+}
+
+.home-summary-card-badge {
+  padding: var(--dtp-space-1) var(--dtp-space-2);
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: var(--dtp-radius-sm);
+  border: 1px solid var(--dtp-tag-prioridade);
+  background: var(--dtp-error-bg);
+  color: var(--dtp-error);
+}
+
+.home-summary-card-total {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--dtp-text-heading);
+  margin-top: var(--dtp-space-3);
+}
+
+.home-summary-card-legend {
+  margin-top: var(--dtp-space-2);
+  display: flex;
+  gap: var(--dtp-space-4);
+  font-size: 0.75rem;
+  color: var(--dtp-text-muted);
+}
+
+/* Seção próximas solicitações */
+.home-section-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--dtp-text-heading);
+  margin-top: var(--dtp-space-8);
+  margin-bottom: var(--dtp-space-4);
+}
+
+.home-solicitacoes-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: var(--dtp-space-4);
+}
+@media (min-width: 768px) {
+  .home-solicitacoes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.home-solicitacao-card {
+  border: 1px solid var(--dtp-border);
+  border-radius: 1rem;
+  padding: var(--dtp-space-4);
+  box-shadow: var(--dtp-shadow-sm);
+  background: var(--dtp-bg-card);
+}
+
+.home-solicitacao-card-tipo {
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--dtp-text-heading);
+  margin-bottom: var(--dtp-space-3);
+}
+
+.home-solicitacao-card-titulo {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--dtp-text-heading);
+}
+
+.home-solicitacao-card-meta {
+  font-size: 0.875rem;
+  color: var(--dtp-text-muted);
+  margin-top: var(--dtp-space-1);
+}
+
+.home-solicitacao-card-details {
+  margin-top: var(--dtp-space-3);
+  font-size: 0.875rem;
+  color: var(--dtp-text);
+}
+
+.home-solicitacao-card-btn {
+  margin-top: var(--dtp-space-4);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--dtp-space-2);
+  padding: var(--dtp-space-2) var(--dtp-space-4);
+  background: var(--dtp-primary);
+  color: var(--dtp-text-on-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: var(--dtp-radius);
+  text-decoration: none;
+}
+.home-solicitacao-card-btn:hover {
+  background: var(--dtp-primary-hover);
+}

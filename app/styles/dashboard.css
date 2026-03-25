@@ -1,0 +1,122 @@
+/**
+ * Layout do Dashboard (Sidebar + Header + Main)
+ * Usado em /inicio e todas as páginas internas.
+ * Edite aqui: menu lateral, cabeçalho e área principal.
+ */
+
+/* Layout geral */
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--dtp-bg-page);
+}
+
+.dashboard-main-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.dashboard-main {
+  flex: 1;
+  overflow: auto;
+  padding: var(--dtp-space-4);
+}
+
+/* Sidebar */
+.dashboard-sidebar {
+  width: 16rem;
+  min-height: 100vh;
+  background: var(--dtp-sidebar-bg);
+  color: var(--dtp-sidebar-text);
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-sidebar-logo {
+  padding: var(--dtp-space-4);
+}
+
+.dashboard-sidebar-nav {
+  flex: 1;
+  padding: var(--dtp-space-4);
+}
+
+.dashboard-sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: var(--dtp-space-3);
+  padding: var(--dtp-space-3) var(--dtp-space-4);
+  color: var(--dtp-sidebar-text);
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: var(--dtp-radius);
+  text-decoration: none;
+  margin-bottom: var(--dtp-space-1);
+}
+.dashboard-sidebar-link:hover {
+  background: var(--dtp-sidebar-active);
+  color: var(--dtp-sidebar-text);
+}
+.dashboard-sidebar-link.active {
+  background: var(--dtp-sidebar-active);
+  color: var(--dtp-sidebar-text);
+}
+
+.dashboard-sidebar-footer {
+  padding: var(--dtp-space-4);
+  font-size: 0.75rem;
+  color: var(--dtp-sidebar-text-muted);
+  border-top: 1px solid var(--dtp-sidebar-border);
+}
+
+/* Header */
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--dtp-space-4);
+  padding: var(--dtp-space-3) var(--dtp-space-4);
+  border-bottom: 1px solid var(--dtp-border);
+  background: var(--dtp-bg-card);
+}
+
+.dashboard-header-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--dtp-space-2);
+  font-size: 0.875rem;
+  color: var(--dtp-text-muted);
+}
+
+.dashboard-header-breadcrumb a:hover {
+  color: var(--dtp-primary);
+}
+
+.dashboard-header-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--dtp-space-2);
+  max-width: 28rem;
+  flex: 1;
+}
+
+.dashboard-header-search {
+  width: 100%;
+  padding: var(--dtp-space-2) var(--dtp-space-4);
+  border: 1px solid var(--dtp-border);
+  border-radius: var(--dtp-radius);
+  font-size: 0.875rem;
+  background: var(--dtp-bg-page);
+}
+.dashboard-header-search:focus {
+  outline: none;
+  border-color: var(--dtp-primary);
+}
+
+.dashboard-header-user {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--dtp-text-heading);
+}
