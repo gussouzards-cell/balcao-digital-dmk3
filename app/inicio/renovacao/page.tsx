@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ModalFilaAtendimento } from "@/components/atendimento/ModalFilaAtendimento";
-
-const PROTOCOLO_DEMO = "T2500221-01";
+import { type Protocol, useProtocols } from "@/lib/useProtocolos";
 
 function LivePill({ onClick, expanded }: { onClick: () => void; expanded: boolean }) {
   return (
@@ -52,18 +51,25 @@ type QueueVariant = "active" | "muted" | "extra";
 
 function FilaCard({
   variant,
-  title,
-  href,
+  protocol,
 }: {
   variant: QueueVariant;
-  title: string;
-  href?: string;
+  protocol?: Protocol;
 }) {
   const isActive = variant === "active";
   const base = "relative h-[520px] w-[292px] shrink-0 rounded-[6px] border-2 px-4 pb-4 pt-4 sm:h-[596px] sm:w-[322px] sm:px-6 sm:pb-6 sm:pt-5";
   const style = isActive
     ? "border-[#947d01] bg-[#fffae2]"
     : "border-[#947d01] bg-[#fffae2] opacity-50";
+
+  const status =
+    protocol?.status === "nova"
+      ? "Aguardando análise"
+      : protocol?.status === "emEspera"
+        ? "Aguardando documentos"
+        : protocol?.status === "finalizada"
+          ? "Concluído"
+          : "—";
 
   const inner = (
     <>
@@ -72,8 +78,8 @@ function FilaCard({
       <div className="flex gap-2">
         <span className={`mt-1 h-3 w-3 shrink-0 rounded-full bg-rose-600 ${!isActive ? "opacity-70" : ""}`} aria-hidden />
         <div>
-          <h3 className="text-xl font-bold leading-tight text-[#193758] sm:text-[31px]">{title}</h3>
-          <p className="mt-1 text-xs text-[#4d4d4d]">Há 52 horas</p>
+          <h3 className="text-xl font-bold leading-tight text-[#193758] sm:text-[31px]">{protocol?.titulo ?? "—"}</h3>
+          <p className="mt-1 text-xs text-[#4d4d4d]">{protocol?.tempo ? `Há ${protocol.tempo}` : "—"}</p>
         </div>
       </div>
 
@@ -103,18 +109,19 @@ function FilaCard({
             <svg className={`h-4 w-4 ${isActive ? "text-amber-600" : "text-amber-700/80"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span className={isActive ? "font-medium text-[#6c4a02]" : "font-medium text-[#6c4a02]/80"}>Aguardando análise</span>
+            <span className={isActive ? "font-medium text-[#6c4a02]" : "font-medium text-[#6c4a02]/80"}>{status}</span>
           </div>
         </div>
         <p>
           <span className="font-bold text-[#4d4d4d]">Protocolo de atendimento:</span>{" "}
-          <span>{isActive ? "T2500223-01" : "T2500221-01"}</span>
+          <span>{protocol?.protocolo ?? "—"}</span>
         </p>
         <p>
-          <span className="font-bold text-[#4d4d4d]">Tempo decorrido:</span> <span>Lorem ipsum</span>
+          <span className="font-bold text-[#4d4d4d]">Tempo decorrido:</span>{" "}
+          <span>{protocol?.tempo ?? "—"}</span>
         </p>
         <p>
-          <span className="font-bold text-[#4d4d4d]">Setor:</span> <span>Lorem ipsum</span>
+          <span className="font-bold text-[#4d4d4d]">Setor:</span> <span>{protocol?.responsavel ?? "—"}</span>
         </p>
         <p>
           <span className="font-bold text-[#4d4d4d]">DAMSP:</span>{" "}
@@ -124,13 +131,13 @@ function FilaCard({
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             </span>
-            Paga
+            —
           </span>
         </p>
       </div>
-      {isActive && href ? (
+      {isActive && protocol?.protocolo ? (
         <Link
-          href={href}
+          href={`/inicio/renovacao/atendimento/${protocol.protocolo}`}
           className="absolute bottom-4 left-4 right-4 flex h-[36px] items-center justify-center rounded-[4px] bg-[#193758] text-[11px] font-bold text-white shadow-[0px_3.5px_5.5px_rgba(0,0,0,0.05)] hover:opacity-95 sm:bottom-6 sm:left-6 sm:right-6 sm:h-[38px] sm:text-[12px]"
         >
           INICIAR ATENDIMENTO
@@ -153,15 +160,25 @@ function FilaCard({
 export default function RenovacaoPage() {
   const [pageSize] = useState(10);
   const [filaOpen, setFilaOpen] = useState(false);
-  const atendimentoHref = `/inicio/renovacao/atendimento/${PROTOCOLO_DEMO}`;
+  const { protocolos } = useProtocols();
+
+  const renovProtocols = protocolos.filter((p) => p.tipo === "Renovação");
+  const counts = {
+    finalizadas: renovProtocols.filter((p) => p.status === "finalizada").length,
+    emEspera: renovProtocols.filter((p) => p.status === "emEspera").length,
+    novas: renovProtocols.filter((p) => p.status === "nova").length,
+  };
+  const filaCards = renovProtocols.slice(0, 3);
+  const highlightProtocolo = filaCards[0]?.protocolo;
 
   return (
     <div className="space-y-6">
       <ModalFilaAtendimento
         open={filaOpen}
         onClose={() => setFilaOpen(false)}
-        highlightProtocolo={PROTOCOLO_DEMO}
+        highlightProtocolo={highlightProtocolo}
         title="Fila de Atendimento Renovação- ao vivo"
+        tipo="Renovação"
       />
       <div className="rounded-[4px] bg-white p-4 shadow-[0px_2px_4px_rgba(0,0,0,0.05)] sm:p-6">
         <h2 className="text-3xl font-bold leading-tight text-[#193758] sm:text-[40px]">Renovações</h2>
@@ -169,14 +186,14 @@ export default function RenovacaoPage() {
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
           <StatCard
             label="Finalizadas"
-            value="70"
+            value={String(counts.finalizadas)}
             borderClass="border-emerald-500"
             valueClass="text-emerald-700"
             icon={<span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">✓</span>}
           />
           <StatCard
             label="Em Espera"
-            value="28"
+            value={String(counts.emEspera)}
             borderClass="border-amber-400"
             valueClass="text-amber-700"
             icon={
@@ -186,8 +203,8 @@ export default function RenovacaoPage() {
             }
           />
           <StatCard
-            label="Em aberto"
-            value="10"
+            label="Em Aberto"
+            value={String(counts.novas)}
             borderClass="border-rose-600"
             valueClass="text-rose-700"
             icon={
@@ -206,9 +223,9 @@ export default function RenovacaoPage() {
         </div>
 
         <div className="flex gap-5 overflow-x-auto pb-2">
-          <FilaCard variant="active" title="Renovação de Condutax" href={atendimentoHref} />
-          <FilaCard variant="muted" title="Renovação de Condutax" />
-          <FilaCard variant="extra" title="Renovação de Condutax" />
+          <FilaCard variant="active" protocol={filaCards[0]} />
+          <FilaCard variant="muted" protocol={filaCards[1]} />
+          <FilaCard variant="extra" protocol={filaCards[2]} />
         </div>
 
         <div className="mt-4 flex flex-col gap-3 border-t border-[#ccc] pt-4 sm:flex-row sm:items-center sm:justify-between">
@@ -216,7 +233,7 @@ export default function RenovacaoPage() {
             <span>Exibir</span>
             <span className="inline-flex h-8 items-center rounded border border-slate-200 bg-white px-3 font-medium">{pageSize}</span>
             <span className="mx-1 text-slate-300">|</span>
-            <span className="text-slate-600">1-3 de 9 itens</span>
+            <span className="text-slate-600">1-3 de {String(renovProtocols.length)} itens</span>
           </div>
           <div className="flex items-center gap-2 text-sm text-[#2d3748]">
             <span>Página</span>

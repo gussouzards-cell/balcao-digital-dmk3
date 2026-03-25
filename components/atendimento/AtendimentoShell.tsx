@@ -88,7 +88,11 @@ export function AtendimentoShell({
   }));
 
   const filaModalTitle =
-    flowType === "renovacao" ? "Fila de Atendimento Renovação- ao vivo" : "Fila de Atendimento Cadastramento - ao vivo";
+    flowType === "renovacao"
+      ? "Fila de Atendimento Renovação- ao vivo"
+      : "Fila de Atendimento Cadastramento - ao vivo";
+
+  const filaTipo = flowType === "renovacao" ? "Renovação" : "Cadastro";
 
   const rejectClasses =
     rejectVariant === "outline"
@@ -226,6 +230,7 @@ export function AtendimentoShell({
         onClose={() => setFilaOpen(false)}
         highlightProtocolo={protocolo}
         title={filaModalTitle}
+        tipo={filaTipo}
       />
       {showHistorico && (
         <ModalHistoricoAtendimento open={historicoOpen} onClose={() => setHistoricoOpen(false)} />

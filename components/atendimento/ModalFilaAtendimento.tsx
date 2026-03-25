@@ -1,51 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
+import { useProtocols } from "@/lib/useProtocolos";
 
 /** Dados espelhando o modal de fila no Figma (mesma base de Modal_Historico) — substituir por API quando existir. */
-const FILA_ROWS = [
-  {
-    posicao: "1",
-    protocolo: "T2500198-03",
-    servico: "Renovação Condutax",
-    status: "Aguardando análise",
-    tempo: "68 h",
-    prioridade: "SIM",
-  },
-  {
-    posicao: "2",
-    protocolo: "T2500221-01",
-    servico: "Renovação Condutax",
-    status: "Atendimento iniciado",
-    tempo: "52 h",
-    prioridade: "SIM",
-  },
-  {
-    posicao: "3",
-    protocolo: "T2500204-12",
-    servico: "Renovação Condutax",
-    status: "Aguardando documentos",
-    tempo: "41 h",
-    prioridade: "NÃO",
-  },
-  {
-    posicao: "4",
-    protocolo: "T2500188-07",
-    servico: "Renovação Condutax",
-    status: "Em análise jurídica",
-    tempo: "36 h",
-    prioridade: "NÃO",
-  },
-  {
-    posicao: "5",
-    protocolo: "T2500175-22",
-    servico: "Renovação Condutax",
-    status: "Aguardando atendimento",
-    tempo: "24 h",
-    prioridade: "SIM",
-  },
-] as const;
-
 const COLS = [
   { key: "posicao", label: "POSIÇÃO", className: "w-[10%] min-w-[3.5rem]" },
   { key: "protocolo", label: "PROTOCOLO", className: "w-[16%] min-w-[6.5rem]" },
@@ -60,6 +18,7 @@ export function ModalFilaAtendimento({
   onClose,
   highlightProtocolo,
   title = "Fila de atendimento",
+  tipo,
 }: {
   open: boolean;
   onClose: () => void;
@@ -67,7 +26,31 @@ export function ModalFilaAtendimento({
   highlightProtocolo?: string;
   /** Título do modal (Figma varia por fluxo) */
   title?: string;
+  tipo?: "Cadastro" | "Renovação";
 }) {
+  const { protocolos, isLoading } = useProtocols();
+
+  const filaRows = (tipo ? protocolos.filter((p) => p.tipo === tipo) : protocolos)
+    .slice(0, 5)
+    .map((p, idx) => {
+      const status =
+        p.status === "nova"
+          ? "Aguardando análise"
+          : p.status === "emEspera"
+            ? "Aguardando documentos"
+            : "Concluído";
+
+      return {
+        posicao: String(idx + 1),
+        protocolo: p.protocolo,
+        servico: p.titulo,
+        status,
+        tempo: p.tempo,
+        // Backend ainda não retorna essas flags de forma tipada.
+        prioridade: "N/A",
+      };
+    });
+
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
@@ -135,19 +118,32 @@ export function ModalFilaAtendimento({
                 </tr>
               </thead>
               <tbody>
-                {FILA_ROWS.map((row, i) => {
-                  const isCurrent = highlightProtocolo != null && row.protocolo === highlightProtocolo;
+                {isLoading ? (
+                  Array.from({ length: 5 }).map((_, i) => (
+                    <tr key={`sk-${i}`}>
+                      <td className="border-b border-[#d9d9d9] px-2 py-3 font-medium text-[#3f444d]">—</td>
+                      <td className="border-b border-[#d9d9d9] px-2 py-3 font-medium text-[#0f2e4b]">—</td>
+                      <td className="border-b border-[#d9d9d9] px-2 py-3 font-medium text-[#4d4d4d]">—</td>
+                      <td className="border-b border-[#d9d9d9] px-2 py-3 font-medium text-[#4d4d4d]">—</td>
+                      <td className="border-b border-[#d9d9d9] px-2 py-3 font-medium text-[#3f444d]">—</td>
+                      <td className="border-b border-[#d9d9d9] px-2 py-3 font-medium text-[#3f444d]">—</td>
+                    </tr>
+                  ))
+                ) : (
+                  filaRows.map((row, i) => {
+                    const isCurrent = highlightProtocolo != null && row.protocolo === highlightProtocolo;
                   return (
-                    <tr key={i} className={isCurrent ? "bg-[rgba(15,46,75,0.06)]" : undefined}>
+                      <tr key={i} className={isCurrent ? "bg-[rgba(15,46,75,0.06)]" : undefined}>
                       <td className="border-b border-[#d9d9d9] px-2 py-3 font-medium text-[#3f444d]">{row.posicao}</td>
                       <td className="border-b border-[#d9d9d9] px-2 py-3 font-medium text-[#0f2e4b]">{row.protocolo}</td>
                       <td className="border-b border-[#d9d9d9] px-2 py-3 font-medium text-[#4d4d4d]">{row.servico}</td>
                       <td className="border-b border-[#d9d9d9] px-2 py-3 font-medium text-[#4d4d4d]">{row.status}</td>
                       <td className="border-b border-[#d9d9d9] px-2 py-3 font-medium text-[#3f444d]">{row.tempo}</td>
                       <td className="border-b border-[#d9d9d9] px-2 py-3 font-medium text-[#3f444d]">{row.prioridade}</td>
-                    </tr>
-                  );
-                })}
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
