@@ -19,7 +19,9 @@ export default function LoginPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    router.push("/inicio?perfil=user");
+    const normalizedEmail = email.trim().toLowerCase();
+    const isAdmin = normalizedEmail === "admin@dtp.com" && password === "admin";
+    router.push(isAdmin ? "/inicio?perfil=admin" : "/inicio?perfil=user");
   };
 
   return (

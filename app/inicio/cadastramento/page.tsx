@@ -123,7 +123,11 @@ function FilaCard({ variant, protocol }: { variant: QueueVariant; protocol?: Pro
 
 export default function CadastramentoPage() {
   const [filaOpen, setFilaOpen] = useState(false);
-  const { protocolos } = useProtocols();
+  const { protocolos, isLoading } = useProtocols();
+
+  if (isLoading) {
+    return <div className="home-page space-y-6" aria-busy="true" aria-live="polite" />;
+  }
 
   const cadProtocols = protocolos.filter((p) => p.tipo === "Cadastro");
   const counts = {
@@ -133,6 +137,17 @@ export default function CadastramentoPage() {
   };
   const filaCards = cadProtocols.slice(0, 3);
   const highlightProtocolo = filaCards[0]?.protocolo;
+
+  if (!isLoading && cadProtocols.length === 0) {
+    return (
+      <div className="home-page space-y-6">
+        <div className="rounded-[4px] bg-white p-6 shadow-[0px_2px_4px_rgba(0,0,0,0.05)]">
+          <h2 className="text-[18px] font-bold leading-tight text-[#193758]">Cadastramentos</h2>
+          <p className="mt-2 text-sm leading-[1.5] text-[#3f444d]">Ainda não há serviços solicitados.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -144,7 +159,7 @@ export default function CadastramentoPage() {
         tipo="Cadastro"
       />
       <div className="rounded-[4px] bg-white p-6 shadow-[0px_2px_4px_rgba(0,0,0,0.05)]">
-        <h2 className="text-[40px] font-bold leading-tight text-[#193758]">Renovações</h2>
+        <h2 className="text-[40px] font-bold leading-tight text-[#193758]">Cadastramentos</h2>
         <p className="-mt-1 text-sm uppercase text-[#4d4d4d]">TOTAL NO MÊS</p>
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
           <StatCard

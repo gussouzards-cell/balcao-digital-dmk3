@@ -25,10 +25,8 @@ const ARQUIVOS_IDENTIDADE = [
 ];
 
 const DOCUMENTOS = [
-  { label: "RG frente" },
-  { label: "RG verso" },
-  { label: "Documento adicional" },
-  { label: "Formulário" },
+  // Passo 2: mostrar apenas a foto 2x2 do condutor
+  { label: "Foto 2x2 do condutor" },
 ];
 
 export default function DadosCondutorPage() {
@@ -85,12 +83,12 @@ export default function DadosCondutorPage() {
 
         {/* Coluna direita – Documentos enviados */}
         <div className="space-y-4">
-          {/* Grid 2x2 de miniaturas: borda leve, bg branco, hover destaque */}
-          <div className="grid grid-cols-2 gap-4">
+          {/* Apenas uma imagem (foto 2x2) */}
+          <div className="grid grid-cols-1 gap-4">
             {DOCUMENTOS.map((doc, i) => (
               <div
                 key={i}
-                className="relative flex aspect-[4/3] flex-col items-center justify-center rounded-lg border border-slate-200 bg-white transition-shadow hover:border-slate-300 hover:shadow-md"
+                className="relative flex aspect-square flex-col items-center justify-center rounded-lg border border-slate-200 bg-white transition-shadow hover:border-slate-300 hover:shadow-md"
               >
                 <svg className="h-10 w-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14" />

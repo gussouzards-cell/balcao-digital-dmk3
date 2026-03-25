@@ -160,7 +160,11 @@ function FilaCard({
 export default function RenovacaoPage() {
   const [pageSize] = useState(10);
   const [filaOpen, setFilaOpen] = useState(false);
-  const { protocolos } = useProtocols();
+  const { protocolos, isLoading } = useProtocols();
+
+  if (isLoading) {
+    return <div className="home-page space-y-6" aria-busy="true" aria-live="polite" />;
+  }
 
   const renovProtocols = protocolos.filter((p) => p.tipo === "Renovação");
   const counts = {
@@ -170,6 +174,17 @@ export default function RenovacaoPage() {
   };
   const filaCards = renovProtocols.slice(0, 3);
   const highlightProtocolo = filaCards[0]?.protocolo;
+
+  if (!isLoading && renovProtocols.length === 0) {
+    return (
+      <div className="home-page space-y-6">
+        <div className="rounded-[4px] bg-white p-6 shadow-[0px_2px_4px_rgba(0,0,0,0.05)]">
+          <h2 className="text-[18px] font-bold leading-tight text-[#193758]">Renovações</h2>
+          <p className="mt-2 text-sm leading-[1.5] text-[#3f444d]">Ainda não há serviços solicitados.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

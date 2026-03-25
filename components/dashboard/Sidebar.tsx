@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 const NAV_W = "w-[233px]";
@@ -29,11 +29,14 @@ interface SidebarProps {
 
 export function Sidebar({ open = false, onClose }: SidebarProps) {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const perfil = (searchParams?.get("perfil") ?? "").toLowerCase();
+  const isAdmin = perfil === "admin";
   const [licencaOpen, setLicencaOpen] = useState(false);
 
-  const isInicio = pathname === "/inicio";
+  const isInicio = pathname === "/inicio" || pathname === "/inicio/dashboard";
   const isCadastramento = pathname.startsWith("/inicio/cadastramento");
-  const isRenovacao = pathname.startsWith("/inicio/renovacao");
+  const isRenovacao = !isAdmin && pathname.startsWith("/inicio/renovacao");
   const isAlvara = pathname === "/inicio/alvara";
   const isConfig = pathname === "/inicio/configuracoes";
 
@@ -142,34 +145,36 @@ export function Sidebar({ open = false, onClose }: SidebarProps) {
                 </span>
               </Link>
 
-              <Link
-                href="/inicio/renovacao"
-                onClick={() => onClose?.()}
-                className="relative flex h-[30px] items-center pl-[30px]"
-              >
-                <span
-                  className={`absolute left-0 top-0 h-full w-[30px] rounded-[3px] shadow-[0px_3.5px_5.5px_rgba(0,0,0,0.02)] ${
-                    isRenovacao ? "bg-[#193758]" : "bg-[#f1f3f9]"
-                  }`}
-                />
-                <svg
-                  className={`absolute left-[7px] top-1/2 h-4 w-4 -translate-y-1/2 ${
-                    isRenovacao ? "text-white" : "text-slate-500"
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+              {!isAdmin && (
+                <Link
+                  href="/inicio/renovacao"
+                  onClick={() => onClose?.()}
+                  className="relative flex h-[30px] items-center pl-[30px]"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                <span
-                  className={`pl-8 text-[14px] font-bold leading-[1.5] ${
-                    isRenovacao ? "text-[#193758]" : "text-[#a0aec0]"
-                  }`}
-                >
-                  Renovação
-                </span>
-              </Link>
+                  <span
+                    className={`absolute left-0 top-0 h-full w-[30px] rounded-[3px] shadow-[0px_3.5px_5.5px_rgba(0,0,0,0.02)] ${
+                      isRenovacao ? "bg-[#193758]" : "bg-[#f1f3f9]"
+                    }`}
+                  />
+                  <svg
+                    className={`absolute left-[7px] top-1/2 h-4 w-4 -translate-y-1/2 ${
+                      isRenovacao ? "text-white" : "text-slate-500"
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <span
+                    className={`pl-8 text-[14px] font-bold leading-[1.5] ${
+                      isRenovacao ? "text-[#193758]" : "text-[#a0aec0]"
+                    }`}
+                  >
+                    Renovação
+                  </span>
+                </Link>
+              )}
             </div>
           </div>
 

@@ -29,6 +29,12 @@ const atendimentoStepLabels: Record<string, string> = {
 };
 
 function getBreadcrumbs(pathname: string): { href: string; label: string }[] {
+  if (pathname === "/inicio/dashboard") {
+    return [
+      { href: "/inicio/dashboard", label: "Gestão de Atendimento" },
+      { href: "/inicio/dashboard", label: "Início" },
+    ];
+  }
   const match = pathname.match(/^\/inicio\/renovacao\/atendimento\/([^/]+)(?:\/([^/]+))?/);
   if (match) {
     const protocolo = match[1];

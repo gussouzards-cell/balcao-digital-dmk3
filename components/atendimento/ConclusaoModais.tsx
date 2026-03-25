@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 
 const navy = "#0f2e4b";
-const green = "#408955";
 const red = "#be0000";
 
 function ModalBackdrop({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
@@ -51,8 +50,8 @@ function IconReturn({ className }: { className?: string }) {
   );
 }
 
-/** Modal_ConfirmarAprovação — após clicar DEFERIR */
-export function ModalConfirmarAprovacao({
+/** Modal_Confirmação — após clicar DEFERIR (botão PROTOCOLAR abre 14015) */
+export function ModalConfirmarAprovacaoInicial({
   open = true,
   onClose,
   onProtocolar,
@@ -64,6 +63,7 @@ export function ModalConfirmarAprovacao({
   onRetornar: () => void;
 }) {
   if (!open) return null;
+
   return (
     <ModalBackdrop onClose={onClose}>
       <div className="min-h-[310px] px-6 pb-10 pt-10 pr-14 sm:px-6 sm:pr-16">
@@ -87,7 +87,7 @@ export function ModalConfirmarAprovacao({
             type="button"
             onClick={onProtocolar}
             className="inline-flex h-[60px] w-full min-w-0 max-w-[425px] items-center justify-center gap-2 rounded px-2 text-base font-bold text-white hover:opacity-95 sm:ml-auto"
-            style={{ backgroundColor: green }}
+            style={{ backgroundColor: "#408955" }}
           >
             <svg className="h-6 w-6 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden>
               <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth={1.5} />
@@ -96,6 +96,240 @@ export function ModalConfirmarAprovacao({
             PROTOCOLAR
           </button>
         </div>
+      </div>
+    </ModalBackdrop>
+  );
+}
+
+/** Modal_ProtocolarEfetivar — após clicar DEFERIR */
+export function ModalConfirmarAprovacao({
+  open = true,
+  onClose,
+  onProtocolar,
+  onRetornar,
+}: {
+  open?: boolean;
+  onClose: () => void;
+  onProtocolar: () => void;
+  onRetornar: () => void;
+}) {
+  if (!open) return null;
+  return (
+    <ModalBackdrop onClose={onClose}>
+      {/* Estrutura baseada no Figma (cadastro 59026:14015), com contexto de Renovação */}
+      <div className="relative h-[483px] w-full">
+        <div className="absolute left-[24px] top-[24px] w-[905px]">
+          <h2 className="flex flex-col font-bold justify-center relative shrink-0 text-[#0f2e4b] text-[24px] leading-[1.5]">
+            Protocolar e efetivar solicitação?
+          </h2>
+          <p className="mt-[8px] flex flex-col font-medium text-[#3f444d] text-[14px] leading-[1.5]">
+            Para protocolar e efetivar a solicitação, e prosseguir com o deferimento da solicitação, preencha e verifique os
+            campos abaixo, e pressione &quot;EFETIVAR SOLICITAÇÃO&quot;. Caso deseje verificar novamente, pressione &quot;Retornar&quot;.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={onProtocolar}
+          className="absolute left-[436px] top-[399px] h-[60px] w-[528px] bg-[#0f2e4b] px-[8px] py-[4px] rounded-[4px] text-white font-bold text-[16px] flex items-center justify-center gap-[8px] hover:opacity-95"
+        >
+          <svg className="h-6 w-6 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth={1.5} />
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12.5l2.5 2.5 5-5.5" />
+          </svg>
+          EFETIVAR SOLICITAÇÃO
+        </button>
+
+        <button
+          type="button"
+          onClick={onRetornar}
+          className="absolute left-[24px] top-[399px] h-[60px] w-[363px] bg-white border border-[#0f2e4b] rounded-[4px] text-[#0f2e4b] font-medium text-[16px] flex items-center justify-center gap-[8px] hover:bg-slate-50"
+        >
+          <IconReturn className="h-4 w-4 text-[#0f2e4b]" />
+          RETORNAR
+        </button>
+
+        <div className="-translate-y-1/2 absolute left-[24px] top-[152.5px] text-[#3f444d] text-[14px] font-semibold">
+          Insira os dados para protocolar a solicitação
+        </div>
+
+        <div className="absolute left-[24px] top-[171px] w-[940px] h-[196px] border-2 border-[#0b326e] rounded-[4px]">
+          <div className="absolute left-[26px] top-[34px] w-[262px] text-[#4d4d4d]">
+            <p className="font-bold text-[16px]">Número guia DAMSP:</p>
+            <p className="font-normal text-[16px] mt-[8px]">000.0000.000.00000.000.0000.00</p>
+          </div>
+
+          <div className="absolute left-[26px] top-[109px] flex gap-[80px] items-center">
+            {(
+              [
+                ["Data vencimento:", "01/01/2006"],
+                ["Data protocolo:", "01/01/2006"],
+                ["Data efetivação:", "01/01/2006"],
+              ] as const
+            ).map(([label, value]) => (
+              <div key={label} className="w-[230px] text-[#4d4d4d]">
+                <p className="font-bold text-[16px]">{label}</p>
+                <div className="mt-[8px] flex items-center justify-between">
+                  <span className="text-[#484848] text-[16px] font-normal">{value}</span>
+                  <svg className="h-[16px] w-[16px] text-[#0b326e]" viewBox="0 0 24 24" fill="none" aria-hidden>
+                    <path
+                      d="M3 17.25V21h3.75L19.81 7.94l-3.75-3.75L3 17.25z"
+                      stroke="currentColor"
+                      strokeWidth={1.5}
+                      strokeLinejoin="round"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </div>
+                <div className="mt-[8px] h-[1px] w-full bg-[#0b326e] opacity-80" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </ModalBackdrop>
+  );
+}
+
+/** Modal_DeferimentoSolicitacao — baseada no Figma 59026:14038 */
+export function ModalEfetivarSolicitacao({
+  open = true,
+  onClose,
+  onRetornar,
+  onGerarDocumento,
+}: {
+  open?: boolean;
+  onClose: () => void;
+  onRetornar: () => void;
+  onGerarDocumento: () => void;
+}) {
+  if (!open) return null;
+
+  return (
+    <ModalBackdrop onClose={onClose}>
+      <div className="relative h-[518px] w-full">
+        <div className="absolute left-[24px] top-[24px] w-[862px]">
+          <h2 className="flex flex-col font-bold justify-center relative shrink-0 text-[#0f2e4b] text-[24px] leading-[1.5]">
+            Você confirma que os dados abaixo foram verificados e estão de acordo para o deferimento do Renovação de CONDUTAX?
+          </h2>
+          <p className="mt-[8px] flex flex-col font-medium text-[#3f444d] text-[14px] leading-[1.5]">
+            Verifique os dados abaixo e pressione &quot;GERAR DOCUMENTO&quot; para aprovar e deferir a solicitação, e prosseguir para geração de documento. Caso deseje verificar novamente dados anteriores, pressione &quot;Retornar&quot;.
+          </p>
+        </div>
+
+        <div className="absolute left-[24px] top-[195.5px] -translate-y-1/2 text-[#3f444d] text-[14px] font-semibold">
+          Verifique os dados para deferir a solicitação
+        </div>
+
+        <div className="absolute left-[24px] top-[214px] w-[940px] h-[196px] border-2 border-[#0b326e] rounded-[4px]">
+          <div className="absolute left-[26px] top-[34px] w-[262px] text-[#4d4d4d]">
+            <p className="font-bold text-[16px]">Número guia DAMSP:</p>
+            <p className="font-normal text-[16px] mt-[8px]">000.0000.000.00000.000.0000.00</p>
+          </div>
+
+          <div className="absolute left-[26px] top-[109px] flex gap-[80px] items-center">
+            {(
+              [
+                ["Data vencimento:", "01/01/2006"],
+                ["Data protocolo:", "01/01/2006"],
+                ["Data efetivação:", "01/01/2006"],
+              ] as const
+            ).map(([label, value]) => (
+              <div key={label} className="w-[230px] text-[#4d4d4d]">
+                <p className="font-bold text-[16px]">{label}</p>
+                <div className="mt-[8px] flex items-center justify-between">
+                  <span className="text-[#484848] text-[16px] font-normal">{value}</span>
+                </div>
+                <div className="mt-[8px] h-[1px] w-full bg-[#0b326e] opacity-80" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={onGerarDocumento}
+          className="absolute left-[436px] top-[434px] h-[60px] w-[528px] bg-[#408955] px-[8px] py-[4px] rounded-[4px] text-white font-bold text-[16px] flex items-center justify-center gap-[8px] hover:opacity-95"
+        >
+          <svg className="h-6 w-6 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth={1.5} />
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12.5l2.5 2.5 5-5.5" />
+          </svg>
+          GERAR DOCUMENTO
+        </button>
+
+        <button
+          type="button"
+          onClick={onRetornar}
+          className="absolute left-[24px] top-[434px] h-[60px] w-[363px] bg-white border border-[#0f2e4b] rounded-[4px] text-[#0f2e4b] font-medium text-[16px] flex items-center justify-center gap-[8px] hover:bg-slate-50"
+        >
+          <IconReturn className="h-4 w-4 text-[#0f2e4b]" />
+          RETORNAR
+        </button>
+      </div>
+    </ModalBackdrop>
+  );
+}
+
+const IMG_MODELO_DOCUMENTO_CONDUTAX =
+  "https://www.figma.com/api/mcp/asset/32a4633e-7961-4ab6-90af-056e51110a87";
+
+/** Modal_DocumentoGerado — baseada no Figma 59026:14070 */
+export function ModalGerarDocumento({
+  open = true,
+  onClose,
+  onRetornar,
+  onDeferirSolicitacao,
+}: {
+  open?: boolean;
+  onClose: () => void;
+  onRetornar: () => void;
+  onDeferirSolicitacao: () => void;
+}) {
+  if (!open) return null;
+
+  return (
+    <ModalBackdrop onClose={onClose}>
+      <div className="relative h-[694px] w-full">
+        <div className="absolute left-[24px] top-[24px] w-[862px]">
+          <h2 className="flex flex-col font-bold justify-center relative shrink-0 text-[#0f2e4b] text-[24px] leading-[1.5]">
+            Geração de Documento
+          </h2>
+          <p className="mt-[8px] flex flex-col font-medium text-[#3f444d] text-[14px] leading-[1.5]">
+            Verifique o documento gerado e pressione &quot;DEFERIR SOLICITAÇÃO&quot; para deferir a solicitação e prosseguir para conclusão do atendimento. Caso deseje verificar novamente dados anteriores, pressione &quot;Retornar&quot;.
+          </p>
+        </div>
+
+        <div className="absolute left-[24px] top-[135px] w-[940px] h-[450px] border-2 border-[#0b326e] rounded-[4px]" />
+
+        <div className="absolute left-[217px] top-[156px] w-[519px] h-[403px] shadow-[0px_4px_4px_rgba(0,0,0,0.05)]">
+          <img
+            src={IMG_MODELO_DOCUMENTO_CONDUTAX}
+            alt="Modelo de documento"
+            className="absolute inset-0 object-cover pointer-events-none"
+          />
+        </div>
+
+        <button
+          type="button"
+          onClick={onDeferirSolicitacao}
+          className="absolute left-[436px] top-[610px] h-[60px] w-[528px] bg-[#408955] px-[8px] py-[4px] rounded-[4px] text-white font-bold text-[16px] flex items-center justify-center gap-[8px] hover:opacity-95"
+        >
+          <svg className="h-6 w-6 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth={1.5} />
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12.5l2.5 2.5 5-5.5" />
+          </svg>
+          DEFERIR SOLICITAÇÃO
+        </button>
+
+        <button
+          type="button"
+          onClick={onRetornar}
+          className="absolute left-[24px] top-[610px] h-[60px] w-[363px] bg-white border border-[#0f2e4b] rounded-[4px] text-[#0f2e4b] font-medium text-[16px] flex items-center justify-center gap-[8px] hover:bg-slate-50"
+        >
+          <IconReturn className="h-4 w-4 text-[#0f2e4b]" />
+          RETORNAR
+        </button>
       </div>
     </ModalBackdrop>
   );

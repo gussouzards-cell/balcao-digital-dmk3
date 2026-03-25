@@ -21,7 +21,9 @@ export function DashboardLayoutClient({
           sidebarOpen ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       />
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Suspense fallback={null}>
+        <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      </Suspense>
       <div className="dashboard-main-wrap flex min-w-0 flex-1 flex-col">
         <Suspense fallback={<div className="h-[72px] shrink-0 bg-[#f6f6f6]" aria-hidden />}>
           <Header onMenuClick={() => setSidebarOpen(true)} />

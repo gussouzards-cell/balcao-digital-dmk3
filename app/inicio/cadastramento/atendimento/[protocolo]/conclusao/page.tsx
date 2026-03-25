@@ -5,14 +5,26 @@ import { useCallback, useState } from "react";
 import { AtendimentoShell } from "@/components/atendimento/AtendimentoShell";
 import { cadastramentoAtendimentoUrls } from "@/lib/cadastramento-atendimento-nav";
 import {
+  ModalConfirmarAprovacaoCadastroInicial,
   ModalConfirmarAprovacaoCadastro,
+  ModalEfetivarSolicitacaoCadastro,
   ModalConclusaoDeferidaCadastro,
+  ModalGerarDocumentoCadastro,
   ModalConclusaoSolicitacaoCadastro,
   ModalConclusaoReprovadaCadastro,
   ModalIndeferirCadastro,
 } from "@/components/atendimento/CadastroConclusaoModais";
 
-type ModalConclusao = null | "confirmar" | "indeferir" | "sucessoDeferida" | "sucessoReprovada" | "sucessoSolicitacao";
+type ModalConclusao =
+  | null
+  | "confirmar"
+  | "protocolar"
+  | "efetivarSolicitacao"
+  | "gerarDocumento"
+  | "indeferir"
+  | "sucessoDeferida"
+  | "sucessoReprovada"
+  | "sucessoSolicitacao";
 
 export default function CadastramentoConclusaoPage() {
   const params = useParams();
@@ -47,11 +59,29 @@ export default function CadastramentoConclusaoPage() {
         <h2 className="text-2xl font-bold leading-normal text-[#0f2e4b]">Aprovação de solicitação</h2>
       </AtendimentoShell>
 
-      <ModalConfirmarAprovacaoCadastro
+      <ModalConfirmarAprovacaoCadastroInicial
         open={modal === "confirmar"}
         onClose={() => setModal(null)}
         onRetornar={() => setModal(null)}
-        onProtocolar={() => setModal("sucessoDeferida")}
+        onProtocolar={() => setModal("protocolar")}
+      />
+      <ModalConfirmarAprovacaoCadastro
+        open={modal === "protocolar"}
+        onClose={() => setModal(null)}
+        onRetornar={() => setModal("confirmar")}
+        onProtocolar={() => setModal("efetivarSolicitacao")}
+      />
+      <ModalEfetivarSolicitacaoCadastro
+        open={modal === "efetivarSolicitacao"}
+        onClose={() => setModal(null)}
+        onRetornar={() => setModal("protocolar")}
+        onGerarDocumento={() => setModal("gerarDocumento")}
+      />
+      <ModalGerarDocumentoCadastro
+        open={modal === "gerarDocumento"}
+        onClose={() => setModal(null)}
+        onRetornar={() => setModal("efetivarSolicitacao")}
+        onDeferirSolicitacao={() => setModal("sucessoDeferida")}
       />
       <ModalIndeferirCadastro
         open={modal === "indeferir"}

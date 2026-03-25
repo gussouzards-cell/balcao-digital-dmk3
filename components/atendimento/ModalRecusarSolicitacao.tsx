@@ -39,8 +39,12 @@ export function ModalRecusarSolicitacao({
 
   useEffect(() => {
     if (!open) return;
-    setJustificativa("");
-    setMotivosSelecionados([]);
+    // Resetar estados ao abrir o modal, evitando setState síncrono no body do effect.
+    const id = window.requestAnimationFrame(() => {
+      setJustificativa("");
+      setMotivosSelecionados([]);
+    });
+    return () => window.cancelAnimationFrame(id);
   }, [open]);
 
   const [colA, colB] = splitIntoTwoColumns(motivos);

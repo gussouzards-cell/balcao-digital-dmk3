@@ -4,15 +4,27 @@ import { useParams, useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { AtendimentoShell } from "@/components/atendimento/AtendimentoShell";
 import {
+  ModalConfirmarAprovacaoInicial,
   ModalConfirmarAprovacao,
+  ModalEfetivarSolicitacao,
   ModalConclusaoDeferida,
   ModalConclusaoReprovada,
   ModalConclusaoSolicitacao,
+  ModalGerarDocumento,
   ModalIndeferir,
 } from "@/components/atendimento/ConclusaoModais";
 import { renovacaoAtendimentoUrls } from "@/lib/renovacao-atendimento-nav";
 
-type ModalConclusao = null | "confirmar" | "indeferir" | "sucessoDeferida" | "sucessoReprovada" | "sucessoSolicitacao";
+type ModalConclusao =
+  | null
+  | "confirmar"
+  | "protocolar"
+  | "efetivarSolicitacao"
+  | "gerarDocumento"
+  | "indeferir"
+  | "sucessoDeferida"
+  | "sucessoReprovada"
+  | "sucessoSolicitacao";
 
 const JUSTIFICATIVAS = [
   "CNH Inválida.",
@@ -178,11 +190,29 @@ export default function ConclusaoPage() {
       </div>
     </AtendimentoShell>
 
-    <ModalConfirmarAprovacao
+    <ModalConfirmarAprovacaoInicial
       open={modal === "confirmar"}
       onClose={() => setModal(null)}
       onRetornar={() => setModal(null)}
-      onProtocolar={() => setModal("sucessoDeferida")}
+      onProtocolar={() => setModal("protocolar")}
+    />
+    <ModalConfirmarAprovacao
+      open={modal === "protocolar"}
+      onClose={() => setModal(null)}
+      onRetornar={() => setModal("confirmar")}
+      onProtocolar={() => setModal("efetivarSolicitacao")}
+    />
+    <ModalEfetivarSolicitacao
+      open={modal === "efetivarSolicitacao"}
+      onClose={() => setModal(null)}
+      onRetornar={() => setModal("protocolar")}
+      onGerarDocumento={() => setModal("gerarDocumento")}
+    />
+    <ModalGerarDocumento
+      open={modal === "gerarDocumento"}
+      onClose={() => setModal(null)}
+      onRetornar={() => setModal("efetivarSolicitacao")}
+      onDeferirSolicitacao={() => setModal("sucessoDeferida")}
     />
     <ModalIndeferir
       open={modal === "indeferir"}
